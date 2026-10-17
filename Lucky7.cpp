@@ -2,7 +2,7 @@
 #include <string>
 #include <random>
 
-int main()
+void play_lucky7(int chips)
 {
 	std::random_device rd;
 	std::mt19937 gen(rd());
@@ -14,8 +14,16 @@ int main()
 	char playAgain = 'y';
 	while (playAgain == 'y')
 	{
+		if (chips <= 0)
+		{
+			std::cout << "You ran all out of chips!" << std::endl;
+			return;
+		}
+
+		std::cout << "Current Balance: " << chips << " chips." << std::endl;
+
 		int chips_betted = 0;
-		while (chips_betted < 1)
+		while (chips_betted < 1 || chips_betted > chips) //Makes sure you dont bet under 1 and over total chip amount
 		{
 			std::cout << "How many chips are you betting? ";
 			std::string chips;
@@ -58,21 +66,22 @@ int main()
 		if (total < 7 && decision == 1)
 		{
 			std::cout << "Congratulations! You won " << chips_betted << " chips!" << std::endl;
-			//Add chips_betted to user chips
+			chips += chips_betted;
 		}
 		else if (total == 7 && decision == 2)
 		{
 			std::cout << "Congratulations! You won " << (chips_betted * 4) << " chips!" << std::endl;
-			//Add chips_betted * 4 to user chips
+			chips += (chips_betted * 4);
 		}
 		else if (total > 7 && decision == 3)
 		{
 			std::cout << "Congratulations! You won " << chips_betted << " chips!" << std::endl;
-			//Add chips_betted to user chips
+			chips += chips_betted;
 		}
 		else
 		{
 			std::cout << "Wrong! You lost all of your betted chips." << std::endl;
+			chips -= chips_betted;
 		}
 
 		std::string replayInput;
@@ -96,7 +105,14 @@ int main()
 		if (playAgain == 'n')
 		{
 			std::cout << "Thanks for playing Lucky7!" << std::endl;\
-			return 0; //Go to main menu
+			return; //Go to main menu
 		}
 	}
+}
+
+int main()
+{
+	int player_chips = 1000;
+	play_lucky7(player_chips);
+	return 0;
 }
