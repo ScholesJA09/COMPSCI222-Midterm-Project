@@ -8,7 +8,7 @@ void play_lucky7(int chips)
 	std::mt19937 gen(rd());
 	std::uniform_int_distribution<> distr(1, 6); //6-sided Dice
 	
-	std::cout << "Welcome to Lucky7! Bet the outcome of two dice roll." << std::endl;
+	std::cout << "Welcome to Lucky 7! Bet the outcome of two dice roll." << std::endl;
 	std::cout << "\nPayouts:\nLower than 7 - 1:1\nExactly 7 - 4:1\nHigher than 7 - 1:1\n" << std::endl;
 
 	char playAgain = 'y';
@@ -104,7 +104,7 @@ void play_lucky7(int chips)
 
 		if (playAgain == 'n')
 		{
-			std::cout << "Thanks for playing Lucky7!" << std::endl;\
+			std::cout << "Thanks for playing Lucky 7!" << std::endl;\
 			return; //Go to main menu
 		}
 	}
