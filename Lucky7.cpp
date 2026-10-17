@@ -14,12 +14,6 @@ void play_lucky7(int chips)
 	char playAgain = 'y';
 	while (playAgain == 'y')
 	{
-		if (chips <= 0)
-		{
-			std::cout << "You ran all out of chips!" << std::endl;
-			return;
-		}
-
 		std::cout << "Current Balance: " << chips << " chips." << std::endl;
 
 		int chips_betted = 0;
@@ -82,6 +76,12 @@ void play_lucky7(int chips)
 		{
 			std::cout << "Wrong! You lost all of your betted chips." << std::endl;
 			chips -= chips_betted;
+		}
+
+		if (chips <= 0)
+		{
+			std::cout << "You ran all out of chips!" << std::endl;
+			return;
 		}
 
 		std::string replayInput;
