@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Midterm.cpp">
+    <ClCompile Include="Lucky7.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
