@@ -86,5 +86,4 @@ void play_roulette(int* chips) {
 			}
 		}
 	}
-
 }
