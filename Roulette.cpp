@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <cstdlib>
 
 void play_roulette(int* chips) {
 	srand(time(0));
