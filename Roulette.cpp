@@ -71,7 +71,7 @@ void play_roulette(int* chips) {
 			*chips -= bet_amount;
 		}
 		if (*chips == 0) {
-			std::cout << "You're out of chips, come back when you're a little bit more... richer." << std::endl;
+			std::cout << "You're out of chips, come back when you have more chips!" << std::endl;
 			return;
 		}
 		std::string temp = "N/A";
