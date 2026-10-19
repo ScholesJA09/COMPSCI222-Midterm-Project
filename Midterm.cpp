@@ -564,9 +564,15 @@ int main()
 			//Check stats function
 			decision = 0;
 		}
+		else if (decision == 5)
+		{
+			std::cout << "Thanks for visiting the casino!" << std::endl;
+			return 0;
+		}
 		else
 		{
-			return 0;
+			std::cout << "Invalid input." << std::endl;
+			decision = 0;
 		}
 	}
 	return 0;
