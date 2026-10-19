@@ -7,6 +7,12 @@
 #include <cstdlib>
 using namespace std;
 
+int player_chips = 1000;
+int highest_player_chips = 0;
+int current_rounds_won = 0;
+int most_rounds_won = 0;
+int biggest_win = 0;
+
 struct Card
 {
 	string rank;
@@ -51,6 +57,39 @@ vector<Card> createDeck()
 	}
 
 	return deck;
+}
+
+void round_won(int& current, int& most)
+{
+	current++;
+	if (current > most)
+	{
+		most = current;
+	}
+}
+
+void round_lost(int& current)
+{
+	current = 0;
+}
+
+int highest_chip_peak(int& chips, int highest_chips)
+{
+	if (chips > highest_chips)
+	{
+		return chips;
+	}
+	return highest_chips;
+}
+
+int biggest_amount_won(int& chips_won, int& biggest)
+{
+	if (chips_won > biggest)
+	{
+		biggest = chips_won;
+		return chips_won;
+	}
+	return biggest;
 }
 
 void shuffleDeck(vector<Card>& deck)
@@ -214,14 +253,19 @@ void playBlackjack(int& chips)
 		{
 			cout << "Natural Blackjack! you win!\n";
 			chips += bet + (bet * 3 / 2);
+			round_won(current_rounds_won, most_rounds_won);
+			biggest_win = biggest_amount_won(bet, biggest_win);
 		}
 
 		else
 		{
 			cout << "Dealer has Blackjack! you lose.\n";
+			round_lost(current_rounds_won);
 		}
 
 		cout << "\nCurrent Chips: " << chips << endl;
+
+		highest_player_chips = highest_chip_peak(player_chips, highest_player_chips);
 
 		return;
 	}
@@ -262,6 +306,9 @@ void playBlackjack(int& chips)
 			{
 				cout << "\nYou busted! You lose.\n";
 
+				round_lost(current_rounds_won);
+				highest_player_chips = highest_chip_peak(player_chips, highest_player_chips);
+
 				playerTurn = false;
 			}
 		}
@@ -289,6 +336,8 @@ void playBlackjack(int& chips)
 			if (calculateHandValue(playerHand) > 21)
 			{
 				cout << "You Busted!\n";
+				round_lost(current_rounds_won);
+				highest_player_chips = highest_chip_peak(player_chips, highest_player_chips);
 			}
 
 			playerTurn = false;
@@ -298,6 +347,7 @@ void playBlackjack(int& chips)
 		{
 			cout << "\nInvalid choice.  Try again.\n";
 		}
+
 	}
 
 	// Dealers turn
@@ -319,6 +369,8 @@ void playBlackjack(int& chips)
 		if (calculateHandValue(dealerHand) > 21)
 		{
 			cout << "\nDealer busted! you win!\n";
+			round_won(current_rounds_won, most_rounds_won);
+			biggest_win = biggest_amount_won(bet, biggest_win);
 		}
 
 		else
@@ -341,17 +393,21 @@ void playBlackjack(int& chips)
 	if (playerTotal > 21)
 	{
 		cout << "You busted! Dealer wins!\n";
+		round_lost(current_rounds_won);
 	}
 
 	else if (dealerTotal > 21)
 	{
 		cout << "Dealer busted! You win!\n";
 		chips += bet * 2;
+		round_won(current_rounds_won, most_rounds_won);
+		biggest_win = biggest_amount_won(bet, biggest_win);
 	}
 
 	else if (dealerTotal > playerTotal)
 	{
 		cout << "Dealer wins!\n";
+		round_lost(current_rounds_won);
 
 	}
 
@@ -359,6 +415,8 @@ void playBlackjack(int& chips)
 	{
 		cout << "You win!\n";
 		chips += bet * 2;
+		round_won(current_rounds_won, most_rounds_won);
+		biggest_win = biggest_amount_won(bet, biggest_win);
 	}
 
 	else
@@ -366,7 +424,7 @@ void playBlackjack(int& chips)
 		cout << "You both push.\n";
 		chips += bet;
 	}
-
+	highest_player_chips = highest_chip_peak(player_chips, highest_player_chips);
 	cout << "\nCurrent Chips: " << chips << endl;
 }
 
@@ -467,21 +525,31 @@ void play_roulette(int& chips) {
 			bet_amount *= 2;
 			std::cout << "It was odd! You win " << bet_amount << " chips!" << std::endl;
 			chips += bet_amount;
+			round_won(current_rounds_won, most_rounds_won);
+			biggest_win = biggest_amount_won(bet_amount, biggest_win);
 		}
 		else if (bet_type == 38 && (roll_num % 2) == 0) {
 			bet_amount *= 2;
 			std::cout << "It was even! You win " << bet_amount << " chips!" << std::endl;
 			chips += bet_amount;
+			round_won(current_rounds_won, most_rounds_won);
+			biggest_win = biggest_amount_won(bet_amount, biggest_win);
 		}
 		else if (bet_type == roll_num) {
 			bet_amount *= 30;
 			std::cout << "You guessed " << roll_num << "! You win " << bet_amount << " chips!" << std::endl;
 			chips += bet_amount;
+			round_won(current_rounds_won, most_rounds_won);
+			biggest_win = biggest_amount_won(bet_amount, biggest_win);
 		}
 		else {
 			std::cout << "You lost " << bet_amount << " chips..." << std::endl;
 			chips -= bet_amount;
+			round_lost(current_rounds_won);
 		}
+
+		highest_player_chips = highest_chip_peak(player_chips, highest_player_chips);
+
 		if (chips == 0) {
 			std::cout << "You're out of chips, come back when you have more chips!" << std::endl;
 			return;
@@ -559,22 +627,32 @@ void play_lucky7(int& chips)
 		{
 			std::cout << "Congratulations! You won " << chips_betted << " chips!" << std::endl;
 			chips += chips_betted;
+			round_won(current_rounds_won, most_rounds_won);
+			biggest_win = biggest_amount_won(chips_betted, biggest_win);
 		}
 		else if (total == 7 && decision == 2)
 		{
 			std::cout << "Congratulations! You won " << (chips_betted * 4) << " chips!" << std::endl;
 			chips += (chips_betted * 4);
+			round_won(current_rounds_won, most_rounds_won);
+			chips_betted = chips_betted * 4;
+			biggest_win = biggest_amount_won(chips_betted, biggest_win);
 		}
 		else if (total > 7 && decision == 3)
 		{
 			std::cout << "Congratulations! You won " << chips_betted << " chips!" << std::endl;
 			chips += chips_betted;
+			round_won(current_rounds_won, most_rounds_won);
+			biggest_win = biggest_amount_won(chips_betted, biggest_win);
 		}
 		else
 		{
 			std::cout << "Wrong! You lost all of your betted chips." << std::endl;
 			chips -= chips_betted;
+			round_lost(current_rounds_won);
 		}
+
+		highest_player_chips = highest_chip_peak(player_chips, highest_player_chips);
 
 		if (chips <= 0)
 		{
@@ -608,9 +686,16 @@ void play_lucky7(int& chips)
 	}
 }
 
+void check_stats(int highest_chips, int most_rounds, int most_won)
+{
+	std::cout << "\nStats:" << std::endl;
+	std::cout << "Highest chip peak: " << highest_chips << std::endl;
+	std::cout << "Most rounds won in a row: " << most_rounds << std::endl;
+	std::cout << "Biggest single win: $" << most_won << "\n" <<  std::endl;
+}
+
 int main()
 {
-	int player_chips = 1000;
 	std::cout << "Welcome to the casino! Choose what game to play:" << std::endl;
 
 	while (true)
@@ -620,6 +705,7 @@ int main()
 		std::getline(std::cin, inputD);
 
 		int decision;
+		highest_player_chips = highest_chip_peak(player_chips, highest_player_chips);
 
 		try
 		{
@@ -648,7 +734,7 @@ int main()
 
 		else if (decision == 4)
 		{
-			//Check stats function
+			check_stats(highest_player_chips, most_rounds_won, biggest_win);
 		}
 		else if (decision == 5)
 		{
