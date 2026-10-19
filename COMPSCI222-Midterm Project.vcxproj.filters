@@ -18,8 +18,5 @@
     <ClCompile Include="Blackjack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Roulette.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>
