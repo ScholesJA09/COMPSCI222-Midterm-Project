@@ -694,13 +694,93 @@ void check_stats(int highest_chips, int most_rounds, int most_won)
 	std::cout << "Biggest single win: $" << most_won << "\n" <<  std::endl;
 }
 
+
+void takeLoan(int& player_chips, int& loan_debt)
+{
+	if (player_chips > 0)
+	{
+		std::cout << "You can only take a loan when your out of chips.\n";
+		return;
+	}
+
+	player_chips += 500;
+	loan_debt += 500;
+
+	std::cout << "\n==== CASINO LOAN ====\n";
+	std::cout << "You borrowed 500 chips!\n";
+	std::cout << "Current Chips: " << player_chips << std::endl;
+	std::cout << "Total Debt: " << loan_debt << std::endl;
+}
+
+void repayLoan(int& player_chips, int& loan_debt)
+{
+	if (loan_debt == 0)
+	{
+		std::cout << "\nYou don't have any outstanding loans!\n";
+		return;
+	}
+
+	std::cout << "\n==== REPAY LOAN ====\n";
+	std::cout << "Current Chips: " << player_chips << std::endl;
+	std::cout << "Total Debt: " << loan_debt << std::endl;
+
+	int payment;
+
+	std::cout << "How many chips would you like to repay? ";
+	if (!(std::cin >> payment))
+	{
+		std::cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		std::cout << "Invalid payment.\n";
+		return;
+	}
+
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+	if (payment <= 0 || payment > player_chips || payment > loan_debt)
+	{
+		std::cout << "Invalid payment amount.\n";
+		return;
+	}
+
+	player_chips -= payment;
+	loan_debt -= payment;
+
+	std::cout << "\nPayment successful!\n";
+	std::cout << "Remaining Chips: " << player_chips << std::endl;
+	std::cout << "Remaining Debt: " << loan_debt << std::endl;
+}
+
 int main()
 {
+
+	int loan_debt = 0;
+
 	std::cout << "Welcome to the casino! Choose what game to play:" << std::endl;
 
 	while (true)
 	{
-		std::cout << "(1) - Blackjack\n(2) - Roulette\n(3) - Lucky 7\n(4) - Check Stats\n(5) - Quit" << std::endl;
+		if (player_chips <= 0)
+		{
+			std::string loanChoice;
+
+			std::cout << "\nYou have run out of chips\n";
+			std::cout << "Would you like to take out a loan of 500 chips? (y/n): ";
+			std:cin >> loanChoice;
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+			if (loanChoice == "y" || loanChoice == "Y")
+			{
+				takeLoan(player_chips, loan_debt);
+			}
+			else
+			{
+				std::cout << "You have no chips left.  Thanks for playing!\n";
+				return 0;
+			}
+		}
+
+		std::cout << "(1) - Blackjack\n(2) - Roulette\n(3) - Lucky 7\n(4) - Check Stats\n(5) - Repay Loan\n(6) - Quit" << std::endl;
 		std::string inputD;
 		std::getline(std::cin, inputD);
 
@@ -738,9 +818,15 @@ int main()
 		}
 		else if (decision == 5)
 		{
+			repayLoan(player_chips, loan_debt);
+		}
+
+		else if (decision == 6)
+		{
 			std::cout << "Thanks for visiting the casino!" << std::endl;
 			return 0;
 		}
+
 		else
 		{
 			std::cout << "Invalid choice, try again." << std::endl;
