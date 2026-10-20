@@ -694,7 +694,6 @@ void check_stats(int highest_chips, int most_rounds, int most_won)
 	std::cout << "Biggest single win: $" << most_won << "\n" <<  std::endl;
 }
 
-
 void takeLoan(int& player_chips, int& loan_debt)
 {
 	if (player_chips > 0)
