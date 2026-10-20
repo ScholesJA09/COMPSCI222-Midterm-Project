@@ -779,6 +779,12 @@ int main()
 				return 0;
 			}
 		}
+		
+		else if (player_chips >= 10000)
+		{
+			std::cout << "You have won way too many chips. The pit boss has kicked you out." << std::endl;
+			return 0;
+		}
 
 		std::cout << "(1) - Blackjack\n(2) - Roulette\n(3) - Lucky 7\n(4) - Check Stats\n(5) - Repay Loan\n(6) - Quit" << std::endl;
 		std::string inputD;
